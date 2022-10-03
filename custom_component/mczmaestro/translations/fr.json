@@ -1,0 +1,23 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "title": "Configuration MCZ Maestro",
+                "description": "Définir les paramètres de connexion, Home-Assistant doit avoir un accès direct au poêle.",
+                "data": {
+                    "host": "IP",
+                    "port": "Port",
+                    "scan_interval": "Seconds entre chaque mise à jour de l'état"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+            "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
+            "unknown": "[%key:common::config_flow::error::unknown%]"
+        },
+        "abort": {
+            "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
+        }
+    }
+}

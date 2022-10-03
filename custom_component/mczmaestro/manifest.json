@@ -1,0 +1,12 @@
+{
+  "name": "MCZ Maestro",
+  "domain": "mczmaestro",
+  "documentation": "https://github.com/Aohzan/hass-mcz-maestro",
+  "issue_tracker": "https://github.com/Aohzan/hass-mcz-maestro/issues",
+  "codeowners": ["@Aohzan"],
+  "config_flow": true,
+  "requirements": ["websocket-client==0.57.0"],
+  "dependencies": [],
+  "version": "0.1.0",
+  "iot_class": "local_polling"
+}
