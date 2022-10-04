@@ -16,7 +16,7 @@ from homeassistant.helpers.update_coordinator import (
 from homeassistant.util import slugify
 
 from .const import CONTROLLER, COORDINATOR, DOMAIN, PLATFORMS, UNDO_UPDATE_LISTENER
-from .tools import MaestroController
+from .maestro import MaestroController
 
 _LOGGER = logging.getLogger(__name__)
 

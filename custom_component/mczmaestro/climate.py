@@ -15,7 +15,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import MczEntity
 from .const import CONTROLLER, COORDINATOR, DOMAIN
-from .tools import get_maestro_power_state
+from .maestro import get_maestro_power_state
 
 _LOGGER = logging.getLogger(__name__)
 

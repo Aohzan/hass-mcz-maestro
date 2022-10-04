@@ -10,9 +10,9 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from . import MaestroController, MczEntity
+from . import MczEntity
 from .const import CONTROLLER, COORDINATOR, DOMAIN
-from .tools import get_maestro_state_description
+from .maestro import MaestroController, get_maestro_state_description
 
 _LOGGER = logging.getLogger(__name__)
 

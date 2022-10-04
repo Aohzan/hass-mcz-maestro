@@ -6,7 +6,7 @@ from homeassistant.const import CONF_HOST, CONF_PORT, CONF_SCAN_INTERVAL
 from homeassistant.data_entry_flow import FlowResult
 
 from .const import DOMAIN
-from .tools import MaestroController
+from .maestro import MaestroController
 
 BASE_SCHEMA = vol.Schema(
     {
