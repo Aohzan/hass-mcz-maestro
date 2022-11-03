@@ -51,8 +51,6 @@ class MczStateEntity(MczEntity, SensorEntity):
     @property
     def native_value(self) -> str:
         """Return the state."""
-        _LOGGER.debug("State entity debug")
-        _LOGGER.debug(self.coordinator.data)
         return get_maestro_state_description(self.coordinator.data["Stove_State"])
 
     @property
@@ -83,5 +81,4 @@ class MczSensorEntity(MczEntity, SensorEntity):
     @property
     def native_value(self) -> float:
         """Return the state."""
-        _LOGGER.debug(self.coordinator.data)
         return self.coordinator.data[self._command_name]
