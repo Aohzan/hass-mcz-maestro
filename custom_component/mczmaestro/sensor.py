@@ -83,4 +83,5 @@ class MczSensorEntity(MczEntity, SensorEntity):
     @property
     def native_value(self) -> float:
         """Return the state."""
+        _LOGGER.debug(self.coordinator.data)
         return self.coordinator.data[self._command_name]
