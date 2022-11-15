@@ -1,6 +1,11 @@
 """MCZ Maestro."""
 import websocket
 
+import logging
+
+
+_LOGGER = logging.getLogger(__name__)
+
 
 class MaestroController:
     """Control the MCZ."""
@@ -107,80 +112,99 @@ MAESTRO_STOVESTATE = [
     MaestroStoveState(69, "WAITING FOR SECURITY ALARMS", 0),
 ]
 
+MAESTRO_MESSAGE_TYPE_TEMP = "temperature"
+MAESTRO_MESSAGE_TYPE_INT = "int"
+MAESTRO_MESSAGE_TYPE_3WAY = "3way"
+MAESTRO_MESSAGE_TYPE_BRAZIER = "brazier"
+MAESTRO_MESSAGE_TYPE_TIMESPAN = "timespan"
+MAESTRO_MESSAGE_TYPE_ONOFF = "onoff"
+
 MAESTRO_INFORMATION = [
     MaestroInformation(0, "Messagetype", "MaestoMessageType"),
-    MaestroInformation(1, "Stove_State", "int"),
-    MaestroInformation(2, "Fan_State", "int"),
-    MaestroInformation(3, "DuctedFan1", "int"),
-    MaestroInformation(4, "DuctedFan2", "int"),
-    MaestroInformation(5, "Fume_Temperature", "int"),
-    MaestroInformation(6, "Ambient_Temperature", "temperature"),
-    MaestroInformation(7, "Puffer_Temperature", "temperature"),
-    MaestroInformation(8, "Boiler_Temperature", "temperature"),
-    MaestroInformation(9, "NTC3_Temperature", "temperature"),
-    MaestroInformation(10, "Candle_Condition", "int"),
-    MaestroInformation(11, "ACTIVE_Set", "int"),
-    MaestroInformation(12, "RPM_Fam_Fume", "int"),
-    MaestroInformation(13, "RPM_WormWheel_Set", "int"),
-    MaestroInformation(14, "RPM_WormWheel_Live", "int"),
-    MaestroInformation(15, "3WayValve", "3way"),
-    MaestroInformation(16, "Pump_PWM", "int"),
-    MaestroInformation(17, "Brazier", "brazier"),
+    MaestroInformation(1, "Stove_State", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(2, "Fan_State", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(3, "DuctedFan1", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(4, "DuctedFan2", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(5, "Fume_Temperature", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(6, "Ambient_Temperature", MAESTRO_MESSAGE_TYPE_TEMP),
+    MaestroInformation(7, "Puffer_Temperature", MAESTRO_MESSAGE_TYPE_TEMP),
+    MaestroInformation(8, "Boiler_Temperature", MAESTRO_MESSAGE_TYPE_TEMP),
+    MaestroInformation(9, "NTC3_Temperature", MAESTRO_MESSAGE_TYPE_TEMP),
+    MaestroInformation(10, "Candle_Condition", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(11, "ACTIVE_Set", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(12, "RPM_Fam_Fume", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(13, "RPM_WormWheel_Set", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(14, "RPM_WormWheel_Live", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(15, "3WayValve", MAESTRO_MESSAGE_TYPE_3WAY),
+    MaestroInformation(16, "Pump_PWM", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(17, "Brazier", MAESTRO_MESSAGE_TYPE_BRAZIER),
     MaestroInformation(
-        18, "Profile", "int"
+        18, "Profile", MAESTRO_MESSAGE_TYPE_INT
     ),  # 0, 10 = Manual, 1 & 11 = Dynamic, Overnight, Comfort, Power
-    MaestroInformation(19, "Modbus_Address", "int"),
-    MaestroInformation(20, "Active_Mode", "int"),
-    MaestroInformation(21, "Active_Live", "int"),
-    MaestroInformation(22, "Control_Mode", "int"),
-    MaestroInformation(23, "Eco_Mode", "int"),
-    MaestroInformation(24, "Silent_Mode", "int"),
-    MaestroInformation(25, "Chronostat", "int"),
-    MaestroInformation(26, "Temperature_Setpoint", "temperature"),
-    MaestroInformation(27, "Boiler_Setpoint", "temperature"),
-    MaestroInformation(28, "Temperature_Motherboard", "temperature"),
-    MaestroInformation(29, "Power_Level", "int"),
-    MaestroInformation(30, "FirmwareVersion", "int"),
-    MaestroInformation(31, "DatabaseID", "int"),
-    MaestroInformation(32, "Date_Time_Hours", "int"),  # time (0-23)
-    MaestroInformation(33, "Date_Time_Minutes", "int"),  # (0-29)
-    MaestroInformation(34, "Date_Day_Of_Month", "int"),  # (1-31)
-    MaestroInformation(35, "Date_Month", "int"),  # (1-12)
-    MaestroInformation(36, "Date_Year", "int"),
-    MaestroInformation(37, "Total_Operating_Hours", "timespan"),
-    MaestroInformation(38, "Hours_Of_Operation_In_Power1", "timespan"),
-    MaestroInformation(39, "Hours_Of_Operation_In_Power2", "timespan"),
-    MaestroInformation(40, "Hours_Of_Operation_In_Power3", "timespan"),
-    MaestroInformation(41, "Hours_Of_Operation_In_Power4", "timespan"),
-    MaestroInformation(42, "Hours_Of_Operation_In_Power5", "timespan"),
-    MaestroInformation(43, "Hours_To_Service", "int"),
-    MaestroInformation(44, "Minutes_To_Switch_Off", "int"),
-    MaestroInformation(45, "Number_Of_Ignitions", "int"),
-    MaestroInformation(46, "Active_Temperature", "int"),
-    MaestroInformation(47, "Celcius_Or_Fahrenheit", "onoff"),
-    MaestroInformation(48, "Sound_Effects", "onoff"),
-    MaestroInformation(49, "Sound_Effects_State", "onoff"),
-    MaestroInformation(50, "Sleep", "onoff"),
-    MaestroInformation(51, "Mode", "onoff"),
-    MaestroInformation(52, "WifiSondeTemperature1", "int"),
-    MaestroInformation(53, "WifiSondeTemperature2", "int"),
-    MaestroInformation(54, "WifiSondeTemperature3", "int"),
-    MaestroInformation(55, "Unknown", "int"),
-    MaestroInformation(56, "SetPuffer", "int"),
-    MaestroInformation(57, "SetBoiler", "int"),
-    MaestroInformation(58, "SetHealth", "int"),
-    MaestroInformation(59, "Return_Temperature", "temperature"),
-    MaestroInformation(60, "AntiFreeze", "onoff"),
-    MaestroInformation(-1, "Power", "onoff"),
-    MaestroInformation(-2, "Diagnostics", "onoff"),
+    MaestroInformation(19, "Modbus_Address", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(20, "Active_Mode", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(21, "Active_Live", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(22, "Control_Mode", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(23, "Eco_Mode", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(24, "Silent_Mode", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(25, "Chronostat", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(26, "Temperature_Setpoint", MAESTRO_MESSAGE_TYPE_TEMP),
+    MaestroInformation(27, "Boiler_Setpoint", MAESTRO_MESSAGE_TYPE_TEMP),
+    MaestroInformation(28, "Temperature_Motherboard",
+                       MAESTRO_MESSAGE_TYPE_TEMP),
+    MaestroInformation(29, "Power_Level", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(30, "FirmwareVersion", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(31, "DatabaseID", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(32, "Date_Time_Hours",
+                       MAESTRO_MESSAGE_TYPE_INT),  # time (0-23)
+    MaestroInformation(33, "Date_Time_Minutes",
+                       MAESTRO_MESSAGE_TYPE_INT),  # (0-29)
+    MaestroInformation(34, "Date_Day_Of_Month",
+                       MAESTRO_MESSAGE_TYPE_INT),  # (1-31)
+    MaestroInformation(35, "Date_Month", MAESTRO_MESSAGE_TYPE_INT),  # (1-12)
+    MaestroInformation(36, "Date_Year", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(37, "Total_Operating_Hours",
+                       MAESTRO_MESSAGE_TYPE_TIMESPAN),
+    MaestroInformation(38, "Hours_Of_Operation_In_Power1",
+                       MAESTRO_MESSAGE_TYPE_TIMESPAN),
+    MaestroInformation(39, "Hours_Of_Operation_In_Power2",
+                       MAESTRO_MESSAGE_TYPE_TIMESPAN),
+    MaestroInformation(40, "Hours_Of_Operation_In_Power3",
+                       MAESTRO_MESSAGE_TYPE_TIMESPAN),
+    MaestroInformation(41, "Hours_Of_Operation_In_Power4",
+                       MAESTRO_MESSAGE_TYPE_TIMESPAN),
+    MaestroInformation(42, "Hours_Of_Operation_In_Power5",
+                       MAESTRO_MESSAGE_TYPE_TIMESPAN),
+    MaestroInformation(43, "Hours_To_Service", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(44, "Minutes_To_Switch_Off", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(45, "Number_Of_Ignitions", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(46, "Active_Temperature", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(47, "Celcius_Or_Fahrenheit",
+                       MAESTRO_MESSAGE_TYPE_ONOFF),
+    MaestroInformation(48, "Sound_Effects", MAESTRO_MESSAGE_TYPE_ONOFF),
+    MaestroInformation(49, "Sound_Effects_State", MAESTRO_MESSAGE_TYPE_ONOFF),
+    MaestroInformation(50, "Sleep", MAESTRO_MESSAGE_TYPE_ONOFF),
+    MaestroInformation(51, "Mode", MAESTRO_MESSAGE_TYPE_ONOFF),
+    MaestroInformation(52, "WifiSondeTemperature1", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(53, "WifiSondeTemperature2", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(54, "WifiSondeTemperature3", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(55, "Unknown", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(56, "SetPuffer", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(57, "SetBoiler", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(58, "SetHealth", MAESTRO_MESSAGE_TYPE_INT),
+    MaestroInformation(59, "Return_Temperature", MAESTRO_MESSAGE_TYPE_TEMP),
+    MaestroInformation(60, "AntiFreeze", MAESTRO_MESSAGE_TYPE_ONOFF),
+    MaestroInformation(-1, "Power", MAESTRO_MESSAGE_TYPE_ONOFF),
+    MaestroInformation(-2, "Diagnostics", MAESTRO_MESSAGE_TYPE_ONOFF),
 ]
 
 
 def get_maestro_info(frameid: int) -> MaestroInformation:
     """Return Maestro info from the commandlist by name."""
-    if 0 >= frameid <= 60:
+    if 0 <= frameid <= 60:
         return MAESTRO_INFORMATION[frameid]
-    return MaestroInformation(frameid, "Unknown" + str(frameid), "int")
+    _LOGGER.warning("Unknown frameid %s received", frameid)
+    return MaestroInformation(frameid, "Unknown" + str(frameid), MAESTRO_MESSAGE_TYPE_INT)
 
 
 def get_maestro_infoname(infoname: str) -> MaestroInformation:
@@ -188,7 +212,8 @@ def get_maestro_infoname(infoname: str) -> MaestroInformation:
     for information in MAESTRO_INFORMATION:
         if infoname == information.name:
             return information
-    return MaestroInformation(0, "Unknown", "int")
+    _LOGGER.warning("Unknown infoname %s received", infoname)
+    return MaestroInformation(0, "Unknown", MAESTRO_MESSAGE_TYPE_INT)
 
 
 def seconds_to_hours_minutes(seconds: int) -> str:
@@ -203,6 +228,7 @@ def get_maestro_state_description(stateid: int) -> str:
     for state in MAESTRO_STOVESTATE:
         if stateid == state.stateid:
             return state.description
+    _LOGGER.warning("Unknown stateid %s received", stateid)
     return str(stateid)
 
 
@@ -211,33 +237,40 @@ def get_maestro_power_state(stateid: int) -> bool:
     for state in MAESTRO_STOVESTATE:
         if stateid == state.stateid:
             return state.onoroff == 1
+    _LOGGER.warning("Unknown power state id %s received", stateid)
     return False
 
 
 def process_infostring(message: str) -> dict:
     """Convert info message."""
-    res = {}
-    for i in range(1, len(message.split("|"))):
-        info = get_maestro_info(i)
-        if info.messagetype == "temperature":
-            res[info.name] = str(float(int(message.split("|")[i], 16)) / 2)
-        elif info.messagetype == "timespan":
-            res[info.name] = seconds_to_hours_minutes(int(message.split("|")[i], 16))
-        elif info.messagetype == "3way":
-            if int(message.split("|")[i], 16) == 1:
-                res[info.name] = "Sani"
+    result = {}
+    _LOGGER.debug("message to process : %s", message)
+    index = 0
+    for value in message.split("|"):
+        info = get_maestro_info(index)
+        if info.messagetype == MAESTRO_MESSAGE_TYPE_TEMP:
+            result[info.name] = str(float(int(value, base=16)) / 2)
+        elif info.messagetype == MAESTRO_MESSAGE_TYPE_TIMESPAN:
+            result[info.name] = seconds_to_hours_minutes(
+                int(value, base=16))
+        elif info.messagetype == MAESTRO_MESSAGE_TYPE_3WAY:
+            if int(value, base=16) == 1:
+                result[info.name] = "Sani"
             else:
-                res[info.name] = "Risc"
-        elif info.messagetype == "brazier":
-            if int(message.split("|")[i], 16) == 0:
-                res[info.name] = "OK"
+                result[info.name] = "Risc"
+        elif info.messagetype == MAESTRO_MESSAGE_TYPE_BRAZIER:
+            if int(value, base=16) == 0:
+                result[info.name] = "OK"
             else:
-                res[info.name] = "CLR"
+                result[info.name] = "CLR"
         else:
-            res[info.name] = str(int(message.split("|")[i], 16))
+            result[info.name] = str(int(value, base=16))
 
         if info.name == "Stove_State":
-            res["Power"] = str(get_maestro_power_state(int(res[info.name])))
-            res["Diagnostics"] = str(int(res[info.name]) in [30, 48])
+            result["Power"] = str(get_maestro_power_state(int(result[info.name])))
+            result["Diagnostics"] = str(int(result[info.name]) in [30, 48])
 
-    return res
+        index += 1
+
+    _LOGGER.debug("message proceed to : %s", result)
+    return result

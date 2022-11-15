@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.4
+
+- add debug
+- fix state info error
+
 ## 0.1.3
 
 - rename top dir
