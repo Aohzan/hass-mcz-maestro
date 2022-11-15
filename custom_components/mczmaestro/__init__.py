@@ -35,7 +35,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     if not controller.connected:
         _LOGGER.error("Can't connect to MCZ")
-    _LOGGER.debug("Connected to MCZ %s", controller.connected)
+        raise ConfigEntryNotReady
+    _LOGGER.debug("Connected to MCZ")
 
     async def async_update_data():
         """Fetch data from API."""

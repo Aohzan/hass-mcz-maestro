@@ -60,7 +60,7 @@ class MczClimateEntity(MczEntity, ClimateEntity):
     @property
     def hvac_action(self) -> HVACAction:
         """Return the current running hvac operation if supported."""
-        if not get_maestro_power_state(self.coordinator.data["Stove_State"]):
+        if not get_maestro_power_state(int(self.coordinator.data["Stove_State"])):
             return HVACAction.OFF
         if self.coordinator.data["Active_Mode"] == 1:
             return HVACAction.HEATING
@@ -69,7 +69,7 @@ class MczClimateEntity(MczEntity, ClimateEntity):
     @property
     def hvac_mode(self) -> HVACMode:
         """Return hvac operation ie. heat, cool mode."""
-        if get_maestro_power_state(self.coordinator.data["Stove_State"]) == 0:
+        if get_maestro_power_state(int(self.coordinator.data["Stove_State"])) == 0:
             return HVACMode.OFF
         if self.coordinator.data["Control_Mode"] == 1:
             return HVACMode.AUTO

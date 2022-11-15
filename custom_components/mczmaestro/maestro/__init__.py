@@ -150,37 +150,36 @@ MAESTRO_INFORMATION = [
     MaestroInformation(25, "Chronostat", MAESTRO_MESSAGE_TYPE_INT),
     MaestroInformation(26, "Temperature_Setpoint", MAESTRO_MESSAGE_TYPE_TEMP),
     MaestroInformation(27, "Boiler_Setpoint", MAESTRO_MESSAGE_TYPE_TEMP),
-    MaestroInformation(28, "Temperature_Motherboard",
-                       MAESTRO_MESSAGE_TYPE_TEMP),
+    MaestroInformation(28, "Temperature_Motherboard", MAESTRO_MESSAGE_TYPE_TEMP),
     MaestroInformation(29, "Power_Level", MAESTRO_MESSAGE_TYPE_INT),
     MaestroInformation(30, "FirmwareVersion", MAESTRO_MESSAGE_TYPE_INT),
     MaestroInformation(31, "DatabaseID", MAESTRO_MESSAGE_TYPE_INT),
-    MaestroInformation(32, "Date_Time_Hours",
-                       MAESTRO_MESSAGE_TYPE_INT),  # time (0-23)
-    MaestroInformation(33, "Date_Time_Minutes",
-                       MAESTRO_MESSAGE_TYPE_INT),  # (0-29)
-    MaestroInformation(34, "Date_Day_Of_Month",
-                       MAESTRO_MESSAGE_TYPE_INT),  # (1-31)
+    MaestroInformation(32, "Date_Time_Hours", MAESTRO_MESSAGE_TYPE_INT),  # time (0-23)
+    MaestroInformation(33, "Date_Time_Minutes", MAESTRO_MESSAGE_TYPE_INT),  # (0-29)
+    MaestroInformation(34, "Date_Day_Of_Month", MAESTRO_MESSAGE_TYPE_INT),  # (1-31)
     MaestroInformation(35, "Date_Month", MAESTRO_MESSAGE_TYPE_INT),  # (1-12)
     MaestroInformation(36, "Date_Year", MAESTRO_MESSAGE_TYPE_INT),
-    MaestroInformation(37, "Total_Operating_Hours",
-                       MAESTRO_MESSAGE_TYPE_TIMESPAN),
-    MaestroInformation(38, "Hours_Of_Operation_In_Power1",
-                       MAESTRO_MESSAGE_TYPE_TIMESPAN),
-    MaestroInformation(39, "Hours_Of_Operation_In_Power2",
-                       MAESTRO_MESSAGE_TYPE_TIMESPAN),
-    MaestroInformation(40, "Hours_Of_Operation_In_Power3",
-                       MAESTRO_MESSAGE_TYPE_TIMESPAN),
-    MaestroInformation(41, "Hours_Of_Operation_In_Power4",
-                       MAESTRO_MESSAGE_TYPE_TIMESPAN),
-    MaestroInformation(42, "Hours_Of_Operation_In_Power5",
-                       MAESTRO_MESSAGE_TYPE_TIMESPAN),
+    MaestroInformation(37, "Total_Operating_Hours", MAESTRO_MESSAGE_TYPE_TIMESPAN),
+    MaestroInformation(
+        38, "Hours_Of_Operation_In_Power1", MAESTRO_MESSAGE_TYPE_TIMESPAN
+    ),
+    MaestroInformation(
+        39, "Hours_Of_Operation_In_Power2", MAESTRO_MESSAGE_TYPE_TIMESPAN
+    ),
+    MaestroInformation(
+        40, "Hours_Of_Operation_In_Power3", MAESTRO_MESSAGE_TYPE_TIMESPAN
+    ),
+    MaestroInformation(
+        41, "Hours_Of_Operation_In_Power4", MAESTRO_MESSAGE_TYPE_TIMESPAN
+    ),
+    MaestroInformation(
+        42, "Hours_Of_Operation_In_Power5", MAESTRO_MESSAGE_TYPE_TIMESPAN
+    ),
     MaestroInformation(43, "Hours_To_Service", MAESTRO_MESSAGE_TYPE_INT),
     MaestroInformation(44, "Minutes_To_Switch_Off", MAESTRO_MESSAGE_TYPE_INT),
     MaestroInformation(45, "Number_Of_Ignitions", MAESTRO_MESSAGE_TYPE_INT),
     MaestroInformation(46, "Active_Temperature", MAESTRO_MESSAGE_TYPE_INT),
-    MaestroInformation(47, "Celcius_Or_Fahrenheit",
-                       MAESTRO_MESSAGE_TYPE_ONOFF),
+    MaestroInformation(47, "Celcius_Or_Fahrenheit", MAESTRO_MESSAGE_TYPE_ONOFF),
     MaestroInformation(48, "Sound_Effects", MAESTRO_MESSAGE_TYPE_ONOFF),
     MaestroInformation(49, "Sound_Effects_State", MAESTRO_MESSAGE_TYPE_ONOFF),
     MaestroInformation(50, "Sleep", MAESTRO_MESSAGE_TYPE_ONOFF),
@@ -204,7 +203,9 @@ def get_maestro_info(frameid: int) -> MaestroInformation:
     if 0 <= frameid <= 60:
         return MAESTRO_INFORMATION[frameid]
     _LOGGER.warning("Unknown frameid %s received", frameid)
-    return MaestroInformation(frameid, "Unknown" + str(frameid), MAESTRO_MESSAGE_TYPE_INT)
+    return MaestroInformation(
+        frameid, "Unknown" + str(frameid), MAESTRO_MESSAGE_TYPE_INT
+    )
 
 
 def get_maestro_infoname(infoname: str) -> MaestroInformation:
@@ -251,8 +252,7 @@ def process_infostring(message: str) -> dict:
         if info.messagetype == MAESTRO_MESSAGE_TYPE_TEMP:
             result[info.name] = str(float(int(value, base=16)) / 2)
         elif info.messagetype == MAESTRO_MESSAGE_TYPE_TIMESPAN:
-            result[info.name] = seconds_to_hours_minutes(
-                int(value, base=16))
+            result[info.name] = seconds_to_hours_minutes(int(value, base=16))
         elif info.messagetype == MAESTRO_MESSAGE_TYPE_3WAY:
             if int(value, base=16) == 1:
                 result[info.name] = "Sani"

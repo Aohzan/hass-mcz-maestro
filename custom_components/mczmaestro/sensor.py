@@ -54,7 +54,9 @@ class MczStateEntity(MczEntity, SensorEntity):
         _LOGGER.debug("State entity debug")
         _LOGGER.debug(self.coordinator.data)
         if "Stove_State" in self.coordinator.data:
-            return get_maestro_state_description(self.coordinator.data["Stove_State"])
+            return get_maestro_state_description(
+                int(self.coordinator.data["Stove_State"])
+            )
         return "unknown"
 
     @property

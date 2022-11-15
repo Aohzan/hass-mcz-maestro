@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.5
+
+- fix state from climate and sensor
+
 ## 0.1.4
 
 - add debug
