@@ -7,6 +7,6 @@
   "config_flow": true,
   "requirements": ["websocket-client==0.57.0"],
   "dependencies": [],
-  "version": "0.1.0",
+  "version": "0.1.5",
   "iot_class": "local_polling"
 }
